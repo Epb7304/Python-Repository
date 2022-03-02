@@ -1,0 +1,179 @@
+ticTacToeStats,twoThousandFortyEightStats = [0,0,1,0,1,'Random'],0
+from random import randint
+# wins, losses, ties, acheivements, diff, turn # highscore
+def printMenu(text,inputoutput = 0):
+    print('\n'*40)
+    for i in range(len(text)):
+        if type(text[i]) == str: text[i] = [text[i]]
+        x = (' [VARn] VAR0').replace('VARn',str(i)) if inputoutput != 0 and i != 0 else ' VAR0'
+        for j in range(len(text[i])): x = x.replace(('VARn').replace('n',str(j)),str(text[i][j]))
+        print(x)
+def gameMenu():
+    printMenu(['Python Game Platform','Tic Tac Toe','Thirty One','Import','Export'],1)
+    x = input()
+    if x == '1': ticTacToe()
+    elif x == '2': thirtyOne()
+    elif x == '3': pass
+    elif x == '4': pass
+    else: gameMenu()
+
+def ticTacToe():
+    global ticTacToestats
+    diff,turn,board = 2,'Random',[['█','█','█'],['█','█','█'],['█','█','█']]
+    def startMenu():
+        printMenu(['Tic Tac Toe','Start Game','Settings','Statistics','Back'],1)
+        x = input()
+        if x == '1': startGame()
+        elif x == '2': settings()
+        elif x == '3': stats()
+        elif x == '4': gameMenu()
+        startMenu()
+    def settings():
+        nonlocal diff,turn
+        printMenu(['settings',['Difficulty : VAR1',diff],['First Player : VAR1',turn],'Back'],1)
+        x = input()
+        if x == '1':
+            def select():
+                printMenu([['Difficulty : VAR1',diff]])
+                x = input()
+                if 1 <= int(x) <= 5: return int(x)
+                else: return select()
+            diff = select()
+            settings()
+        elif x == '2':
+            def select():
+                printMenu([['First Player : VAR1',turn],'Player','AI','Random','Back'],1)
+                x = input()
+                if x == '1': return 'Player'
+                elif x == '2': return 'AI'
+                elif x == '3': return 'Random'
+                elif x == '4': settings()
+                else: return select()
+            turn = select()
+            settings()
+        elif x == '3': startMenu()
+        else: settings()
+    def stats():
+        printMenu(['Statistics',['Wins: VAR1',ticTacToestats[0]],['Losses: VAR1',ticTacToestats[1]],['Ties: VAR1',ticTacToestats[2]-1],['Games Played: VAR1',ticTacToestats[0]+ticTacToestats[1]+ticTacToestats[2]-1],['Win Percentage: VAR1VAR2',round((ticTacToestats[0]+ticTacToestats[2]/(ticTacToestats[0]+ticTacToestats[1]+ticTacToestats[2]))*100),'%'],'','Achievements']); wait = input('press enter to continue') #achievements on home desktop
+    def startGame():
+        totalmoves = 0
+        def printBoard():
+            printMenu([['VAR1│VAR2│VAR3',board[0][0],board[0][1],board[0][2]],'─┼─┼─',['VAR1│VAR2│VAR3',board[1][0],board[1][1],board[1][2]],'─┼─┼─',['VAR1│VAR2│VAR3',board[2][0],board[2][1],board[2][2]]])
+        def checkWin():
+            wincheck = [[board[0][0],board[0][1],board[0][2]],[board[0][0],board[1][1],board[2][2]],[board[0][0],board[1][0],board[2][0]],[board[1][0],board[1][1],board[1][2]],[board[2][0],board[2][1],board[2][2]],[board[2][0],board[1][1],board[0][2]],[board[0][1],board[1][1],board[2][1]]]
+            for i in wincheck:
+                if i[0] != ' ' and i[0] != '█' and i[0] == i[1] and i[1] == i[2]: return i[0]
+            if totalmoves == 9: return 'Nobody'
+            return -1
+        def playerTurn():
+            nonlocal totalmoves
+            def resetBoard():
+                for i in range(len(board)):
+                    for j in range(len(board[i])):
+                        if board[i][j] == ' ': board[i][j] = '█'
+            while True:
+                resetBoard()
+                while True:
+                    printBoard()
+                    r = input('Row : ')
+                    if r.isnumeric():
+                        r = int(r)
+                        if 1 <= r <= 3:
+                            for j in range(3):
+                                if r != j+1:
+                                    for i in range(len(board[j])):
+                                        if board[j][i] == '█': board[j][i] = ' '
+                            break
+                while True:
+                    printBoard()
+                    c = input('Collumn : ')
+                    if c.isnumeric():
+                        c = int(c)
+                        if 1 <= c <= 3:
+                            for j in range(3):
+                                if r != j+1:
+                                    for i in range(len(board[j])):
+                                        if board[j][i] == '█': board[j][i] = ' '
+                            break
+                r,c = r-1,c-1
+                if board[r][c] == '█': break
+            board[r][c] = 'X'
+            totalmoves += 1
+            if checkWin() != -1: return checkWin()
+            return aiTurn()
+        def aiTurn():
+            nonlocal totalmoves
+            if diff == 1: pass
+            if diff == 2:
+                while True:
+                    x = randint(0,8); r,c = round((x/3)-0.4),x%3
+                    if board[r][c] != ' ' and board[r][c] != '█' and board[r][c] != 'X': break
+            if diff == 3: pass
+            if diff == 4: pass
+            if diff == 5: pass
+            board[r][c] = 'O'
+            totalmoves += 1
+            if checkWin() != -1: return checkWin()
+            return playerTurn()
+        if turn == 'Player' or (randint(1,2) == 1 and turn == 'Random'): win = playerTurn()
+        else: win = aiTurn() #turn starter
+        def resetBoard():
+                for i in range(len(board)):
+                    for j in range(len(board[i])):
+                        if board[i][j] == '█': board[i][j] = ' '
+        resetBoard(); printBoard(); print('\n','==========',win,'Wins!','==========','\n') #victory screen
+        wait = input('Press enter to continue'); startMenu()
+    startMenu()
+def thirtyOne():
+    from random import randint
+    deck,startLives,players = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13','d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','h1','h2','h3','h4','h5','h6','h7','h8','h9','h10','h11','h12','h13'],6,4
+    def startMenu():
+        printMenu(['Thirty One','[1] Start Game','[2] Settings','[3] Back'])
+        x = input()
+        if x == '1': startGame()
+        elif x == '2': settings()
+        elif x == '3': gameMenu()
+        else: startMenu()
+    def settings():
+        nonlocal startLives,players
+        printMenu(['Settings',['[1] Lives : VAR1',startLives],['[2] Players : VAR1',players],'[3] Back'])
+        x = input()
+        if x == '1':
+            def select():
+                printMenu([['Lives : VAR1',startLives]])
+                x = input()
+                if 1 <= int(x) <= 6: return int(x)
+                else: return select()
+            startLives = select()
+            settings()
+        elif x == '2':
+            def select():
+                print('\n'*40,('[2] Players : players').replace('players',str(players)))
+                printMenu()
+                x = input()
+                if 2 <= int(x) <= 4: return int(x)
+                else: return select()
+            players = select()
+            settings()
+        elif x == '3': startMenu()
+        else: settings()
+    def startGame():
+        pass
+    startMenu()
+def twoThousandFortyEight():
+    global twoThousandFortyEightStats
+    board,score = [['    ','    ','    ','    '],['    ','    ','    ','    '],['    ','    ','    ','    '],['    ','    ','    ','    ']],0
+    def startMenu(): startGame()
+    def settings(): pass
+    def startGame():
+        global twoThousandFortyEightStats
+        def printBoard():
+            printMenu([['Score : VAR1',score],['Highscore : VAR1',twoThousandFortyEightStats],'',['VAR1│VAR2│VAR3│VAR4',board[0][0],board[0][1],board[0][2],board[0][3]],'────┼────┼────┼────',['VAR1│VAR2│VAR3│VAR4',board[1][0],board[1][1],board[1][2],board[1][3]],'────┼────┼────┼────',['VAR1│VAR2│VAR3│VAR4',board[2][0],board[2][1],board[2][2],board[2][3]],'────┼────┼────┼────',['VAR1│VAR2│VAR3│VAR4',board[3][0],board[3][1],board[3][2],board[3][3]]])
+        def move(direction):
+            if direction == 'up': pass
+        while True: pass
+        printBoard()
+        end = input()
+    startMenu()
+gameMenu()
+#twoThousandFortyEight()
