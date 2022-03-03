@@ -1,4 +1,4 @@
-def PrintMenu(text,gap = True,label = -1):
+def printMenu(text,gap = True,label = -1):
     if gap: print('\n'*40)
     for i in range(len(text)): 
         if type(text[i]) == str: text[i] = [text[i]]
