@@ -1,0 +1,7 @@
+labSpeed,numberOfLabs = float(input('lab speed : ')),float(input('amount of labs : '))
+while True:
+    packs,timePerPack = float(input('packs : ')),float(input('time/pack : '))
+    time = round(((packs*timePerPack)/labSpeed)/numberOfLabs,2)
+    days,hours,minutes,seconds = int(time/86400),int(time/3600)%24,int(time/60)%60,time%60
+    textNone,textS = '','s';textDay,textHour,textMinute,textAnd = f'{days} day{textS if days>1 else textNone}, ',f'{hours} hour{textS if hours>1 else textNone}, ',f'{minutes} minute{textS if minutes>1 else textNone}, ','and '
+    print(f'time to research (at 60 ups): {textDay if days else textNone}{textHour if hours else textNone}{textMinute if minutes else textNone}{textAnd if time>60 else textNone}{seconds} second{textNone if seconds==1 else textS}')
