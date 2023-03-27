@@ -2,6 +2,6 @@ def menu(title,options,functions):
     print('\n'*99,f'{title}\n')
     for i,j in enumerate(options): print(f' [{i+1}] {j}')
     x = input()
-    try: range(len(options)).index(int(x)-1)
+    try: range(len(functions)).index(int(x)-1)
     except: menu(title,options,functions)
     else: r = 0; exec(functions[int(x)-1])
