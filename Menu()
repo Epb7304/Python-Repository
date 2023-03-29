@@ -4,4 +4,4 @@ def menu(title,options,functions):
     x = input()
     try: range(len(functions)).index(int(x)-1)
     except: menu(title,options,functions)
-    else: r = 0; exec(functions[int(x)-1])
+    else: exec(functions[int(x)-1])
