@@ -5,3 +5,19 @@ def menu(title,options,functions):
     try: range(len(functions)).index(int(x)-1)
     except: menu(title,options,functions)
     else: exec(functions[int(x)-1])
+
+
+## this menu doesnt require functions and if not provided, will return the value of x (its more flexible)
+
+def menu(title,options,functions=-1):
+    print('\n'*99,f'{title}\n')
+    for i,j in enumerate(options): print(f' [{i+1}] {j}')
+    x = input()
+    if functions == -1:
+        try: range(len(options)).index(int(x)-1)
+        except: menu(title,options,functions)
+        else: return x
+    else:
+        try: range(len(functions)).index(int(x)-1)
+        except: menu(title,options,functions)
+        else: exec(functions[int(x)-1])
