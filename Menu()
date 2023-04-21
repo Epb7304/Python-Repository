@@ -21,3 +21,14 @@ def menu(title,options,functions=-1):
         try: range(len(functions)).index(int(x)-1)
         except: menu(title,options,functions)
         else: exec(functions[int(x)-1])
+
+## this menu doesnt automatically link to functions
+
+def menu(title,options):
+    log('Function menu called')
+    print('\n'*99,f'{title}\n')
+    for i,j in enumerate(options): print(f' [{i+1}] {j}')
+    x = linput()
+    try: range(len(options)).index(int(x)-1)
+    except: log('Unexpected input',2); menu(title,options)
+    else: return int(x)
